@@ -1,0 +1,760 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang='en'><head><title>Monitoring JavaMelody on /fsm-mobile_Adam-PC</title>
+<style type='text/css'>
+/* style sheet */
+body {
+	background-color: white;
+	background: url(?resource=backgroundGradient.png) bottom left fixed
+		repeat-x;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 15px;
+}
+
+img {
+	border: 0px;
+	vertical-align: middle;
+}
+
+a {
+	text-decoration: none;
+	color: #0000BB;
+}
+
+a:hover {
+	text-decoration: underline;
+	color: #0000BB;
+}
+
+a:visited {
+	color: #6600BB;
+}
+
+a img {
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+a:hover img {
+	transform: scale(1.25);
+	-ms-transform: scale(1.25); /* IE 9 */
+	-moz-transform: scale(1.25); /* Firefox */
+	-webkit-transform: scale(1.25); /* Safari and Chrome */
+	-o-transform: scale(1.25); /* Opera */
+	-webkit-filter: drop-shadow(2px 2px 1px grey) /* Safari and Chrome */
+}
+
+.chapterTitle img {
+	width: 24px;
+	height: 24px;
+}
+
+.synthese {
+	-moz-box-shadow: 2px 2px 3px #888;
+	-webkit-box-shadow: 2px 2px 3px #888;
+	box-shadow: 2px 2px 3px #888;
+	filter: progid:DXImageTransform.Microsoft.Shadow(color=#888888,
+		direction=135, strength=3);
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+.synthese:hover {
+	transform: scale(1.05);
+	-ms-transform: scale(1.05); /* IE 9 */
+	-moz-transform: scale(1.05); /* Firefox */
+	-webkit-transform: scale(1.05); /* Safari and Chrome */
+	-o-transform: scale(1.05); /* Opera */
+	-webkit-filter: drop-shadow(2px 2px 1px grey) /* Safari and Chrome */
+}
+
+table {
+	border-color: gray;
+	border-spacing: 0;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+th {
+	font-size: 11px;
+	padding: 2px;
+	background-color: #F0F0F0;
+	cursor: pointer;
+}
+
+table tr.odd td {
+	background-color: #F5F5F5;
+}
+
+table tr.highlight td {
+	background-color: #E0E0E0;
+}
+
+td {
+	font-size: 11px;
+	padding: 2px;
+}
+
+table tr:last-child td:first-child {
+	-moz-border-radius-bottomleft: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	border-bottom-left-radius: 5px
+}
+
+table tr:last-child td:last-child {
+	-moz-border-radius-bottomright: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	border-bottom-right-radius: 5px
+}
+
+table thead th:first-child {
+	-moz-border-radius-topleft: 5px;
+	-webkit-border-top-left-radius: 5px;
+	border-top-left-radius: 5px
+}
+
+table thead th:last-child {
+	-moz-border-radius-topright: 5px;
+	-webkit-border-top-right-radius: 5px;
+	border-top-right-radius: 5px
+}
+
+.tooltip em {
+	display: none;
+}
+
+.tooltip:hover {
+	border: 0;
+	position: relative;
+	/* marche pas avec texte long qui se wrappe: z-index: 500; */
+	text-decoration: none;
+	text-align: left;
+}
+
+.tooltip:hover em {
+	font-style: normal;
+	display: block;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	/* une width fixe est nécessaire pour MSIE 7,
+	mais cela gâcherait tout sur firefox, chrome ou MSIE8 qui n'en ont pas besoin
+	width: 800px; */
+	padding: 5px;
+	color: #000;
+	border: 1px solid #bbb;
+	background: #ffc;
+	-moz-box-shadow: 3px 3px 4px #888;
+	-webkit-box-shadow: 3px 3px 4px #888;
+	box-shadow: 3px 3px 4px #888;
+	filter: progid:DXImageTransform.Microsoft.Shadow(color=#888888,
+		direction=135, strength=3);
+}
+
+div#track,div#handle {
+	height: 18px;
+}
+
+div#track {
+	width: 200px;
+	margin-left: 300px;
+	background: url( '?resource=scaler_slider_track.gif' ) center left
+		repeat-x;
+}
+
+div#handle {
+	width: 18px;
+	cursor: col-resize;
+}
+
+.explainPlan {
+	font-size: 8pt;
+	font-family: monospace;
+}
+
+.info {
+	color: green;
+}
+
+.warning {
+	color: orange;
+	font-weight: bold;
+}
+
+.severe {
+	color: red;
+	font-weight: bold;
+}
+
+form {
+	background-color: #F5F5F5;
+	font-size: 11px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+	-moz-box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
+	box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+input[type=text] {
+	border: 1px solid #b9b9b9;
+	border-top: 1px solid #a0a0a0;
+	-moz-border-radius: 1px;
+	-webkit-border-radius: 1px;
+	border-radius: 1px;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+input[type=text]:hover {
+	border: 1px solid #999999;
+	border-top: 1px solid #808080;
+	-moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+input[type=text]:focus {
+	outline: none;
+	border: 1px solid #4d90fe;
+	-moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+input[type=submit]:active {
+	border: medium none transparent;
+	background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.15));
+	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.25) inset, 0px 2px 4px rgba(0, 0, 0, 0.3) inset;
+}
+
+input[type=submit]:hover {
+	background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.05) 40%, rgba(0, 0, 0, 0.15));
+}
+
+input[type=submit] {
+	display: inline-block;
+	font-size: 100%;
+	padding: 0.4em 1em 0.45em;
+	line-height: normal;
+	white-space: nowrap;
+	vertical-align: baseline;
+	text-align: center;
+	cursor: pointer;
+	-moz-user-select: none;
+	color: rgba(0, 0, 0, 0.8);
+	border: medium none transparent;
+	background-color: #E6E6E6;
+	background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.15) 40%, transparent);
+	text-decoration: none;
+	border-radius: 4px;
+	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.25) inset, 0px 2px 0px rgba(255, 255, 255, 0.3) inset, 0px 1px 2px rgba(0, 0, 0, 0.15);
+	transition: box-shadow 0.1s linear 0s;
+}
+
+input[type=checkbox] {
+	vertical-align: bottom;
+	margin: 0px;
+}
+
+#menuBox {
+	width: 268px;
+	font-size: 12px;
+	line-height: 20px;
+	right: -240px;
+	top: 57px; /* change this value to place the menu higher or lower */
+	position: fixed;
+	z-index: 100;
+}
+
+#menuTab {
+	float: left;
+	list-style: none outside none;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	z-index: 99;
+}
+
+#menuTab li span {
+	display: block;
+	padding: 0 5px;
+	position: relative;
+}
+
+#menuLinks {
+	width: 180px;
+	padding: 2px;
+	/*border-left: 1px solid #B4B8BB;*/
+	float: left;
+}
+
+.menuShow,.menuHide {
+	/* we specify the transition length for hiding and showing */
+	transition: margin-right .4s ease-in;
+	-webkit-transition: margin-right .4s ease-in;
+}
+
+.menuHide {
+	margin-right: 0px;
+}
+
+.menuShow {
+	margin-right: 195px;
+}
+
+#menuToggle,.menuButton {
+	cursor: pointer;
+}
+
+#menuToggle {
+	width: 30px;
+	height: 26px;
+}
+
+.menuButton {
+	width: 190px;
+	height: 25px;
+	margin: -1px;
+	text-align: center;
+	border: 1px solid #8A8D92;
+	font: bold 13px Helvetica, Arial, sans-serif;
+	text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.75);
+	background: #1D4151;
+	background-image: -o-linear-gradient(left, #A1A1A1, #6C6C6C);
+	background-image: -ms-linear-gradient(left, #A1A1A1, #6C6C6C);
+	background-image: -moz-linear-gradient(left, #A1A1A1, #6C6C6C);
+	background-image: -webkit-linear-gradient(left, #A1A1A1, #6C6C6C);
+	background-image: -webkit-gradient(linear, left top, right top, from(#A1A1A1),
+		to(#6C6C6C));
+}
+
+.menuButton a {
+	line-height: 25px;
+	color: #E5E5E5;
+	display: block;
+	text-decoration: none;
+}
+
+.menuButton:hover {
+	background: #6C6D76;
+	transition: background .3s linear;
+	-o-transition: background .3s linear;
+	-moz-transition: background .3s linear;
+	-webkit-transition: background .3s linear;
+}
+
+#menuDeco {
+	width: 188px;
+	float: left;
+	box-shadow: 0px 0px 5px #000;
+	-moz-box-shadow: 0px 0px 5px #000;
+	-webkit-box-shadow: 0px 0px 5px #000;
+}
+
+@media print {
+	.noPrint {
+		display: none;
+	}
+}</style>
+<link type='image/png' rel='shortcut icon' href='?resource=systemmonitor.png' />
+<script type='text/javascript' src='?resource=resizable_tables.js'></script>
+<script type='text/javascript' src='?resource=sorttable.js'></script>
+<script type='text/javascript' src='?resource=prototype.js'></script>
+<script type='text/javascript' src='?resource=effects.js'></script>
+<script type='text/javascript' src='?resource=customizableMonitoring.js'></script>
+<script type='text/javascript'>
+function showHide(id){
+  if (document.getElementById(id).style.display=='none') {
+    if (document.getElementById(id + 'Img') != null) {
+      document.getElementById(id + 'Img').src='?resource=bullets/minus.png';
+    }
+    try {
+      Effect.SlideDown(id, { duration: 0.5 });
+    } catch (e) {
+      document.getElementById(id).style.display='inline';
+    }
+  } else {
+    if (document.getElementById(id + 'Img') != null) {
+      document.getElementById(id + 'Img').src='?resource=bullets/plus.png';
+    }
+    try {
+      Effect.SlideUp(id, { duration: 0.5 });
+    } catch (e) {
+      document.getElementById(id).style.display='none';
+    }
+  }
+}
+</script>
+</head><body>
+<h3 class='chapterTitle'><img src='?resource=systemmonitor.png' alt='Stats'/>
+<a name='top'></a>Statistics of <a href='http://javamelody.googlecode.com' target='_blank'>JavaMelody</a> monitoring taken at 2/2/17 3:13 PM on /fsm-mobile_Adam-PC (FSM - Mobile Server)
+</h3>
+<a href='http://code.google.com/p/javamelody/wiki/Donate'><img class='noPrint' style='position: absolute; top: 15px; right: 10px; border: 0;' src='?resource=donate.gif' alt='Donate' /></a>
+<div align='center'>
+<div class='noPrint'>
+<a href='?' title='Refresh this page'><img src='?resource=action_refresh.png' alt='Update'/> Update</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='?format=pdf' title='Display report in PDF format'><img src='?resource=pdf.png' alt='PDF'/> PDF</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='?resource=help/help.html' target='_blank' title="Display online help in a new page"><img src='?resource=action_help.png' alt='Online help'/> Online help</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='?part=jnlp' title="Monitoring with a Rich Desktop Application"><img src='?resource=systemmonitor.png' width='16' height='16' alt='Monitoring with a Rich Desktop Application'/> Desktop</a>&nbsp;&nbsp;&nbsp;&nbsp;
+Choice of period :&nbsp;
+<a href='?period=jour' title='Choice of period Day for charts and requests statistics'><img src='?resource=calendar_view_day.png' alt='Day' /> Day</a>&nbsp;
+<a href='?period=semaine' title='Choice of period Week for charts and requests statistics'><img src='?resource=calendar_view_week.png' alt='Week' /> Week</a>&nbsp;
+<a href='?period=mois' title='Choice of period Month for charts and requests statistics'><img src='?resource=calendar_view_month.png' alt='Month' /> Month</a>&nbsp;
+<a href='?period=annee' title='Choice of period Year for charts and requests statistics'><img src='?resource=calendar.png' alt='Year' /> Year</a>&nbsp;
+<a href='?period=tout' title='Choice of period All for charts and requests statistics'><img src='?resource=calendar.png' alt='All' /> All</a>&nbsp;
+<a href="javascript:showHide('customPeriod');document.customPeriodForm.startDate.focus();" 
+title='Choice of period Customized for charts and requests statistics'>
+<img src='?resource=calendar.png' alt='Customized' /> Customized</a>
+<div id='customPeriod' style='display: none;'>
+<script type='text/javascript'>
+function validateCustomPeriodForm() {
+   periodForm = document.customPeriodForm;
+   if (periodForm.startDate.value.length == 0) {
+      alert('Dates are mandatory');
+      periodForm.startDate.focus();
+      return false;
+   }
+   if (periodForm.endDate.value.length == 0) {
+      alert('Dates are mandatory');
+      periodForm.endDate.focus();
+      return false;
+   }
+   periodForm.period.value=periodForm.startDate.value + '|' + periodForm.endDate.value;
+   return true;
+}
+</script>
+<br/>
+<form name='customPeriodForm' method='get' action='' onsubmit='return validateCustomPeriodForm();'>
+<br/><b>From</b>&nbsp;&nbsp;<input type='text' size='10' name='startDate' 
+/>&nbsp;&nbsp;<b>to</b>&nbsp;&nbsp;<input type='text' size='10' name='endDate' 
+/>&nbsp;&nbsp;
+(m/d/yy)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='submit' value='OK'/><br/><br/>
+<input type='hidden' name='period' value=''/>
+</form><br/>
+</div>
+</div>
+<a href='?part=graph&amp;graph=usedMemory'><img class='synthese' src='?width=200&amp;height=50&amp;graph=usedMemory' alt="Used memory" title="Used memory"/></a>
+<a href='?part=graph&amp;graph=cpu'><img class='synthese' src='?width=200&amp;height=50&amp;graph=cpu' alt="% CPU" title="% CPU"/></a>
+<a href='?part=graph&amp;graph=httpSessions'><img class='synthese' src='?width=200&amp;height=50&amp;graph=httpSessions' alt="Http sessions" title="Http sessions"/></a>
+<br/>
+<a href='?part=graph&amp;graph=activeThreads'><img class='synthese' src='?width=200&amp;height=50&amp;graph=activeThreads' alt="Active threads" title="Active threads"/></a>
+<a href='?part=graph&amp;graph=activeConnections'><img class='synthese' src='?width=200&amp;height=50&amp;graph=activeConnections' alt="Active jdbc connections" title="Active jdbc connections"/></a>
+<a href='?part=graph&amp;graph=usedConnections'><img class='synthese' src='?width=200&amp;height=50&amp;graph=usedConnections' alt="Used jdbc connections" title="Used jdbc connections"/></a>
+<br/>
+<a href='?part=graph&amp;graph=httpHitsRate'><img class='synthese' src='?width=200&amp;height=50&amp;graph=httpHitsRate' alt="Http hits per minute" title="Http hits per minute"/></a>
+<a href='?part=graph&amp;graph=httpMeanTimes'><img class='synthese' src='?width=200&amp;height=50&amp;graph=httpMeanTimes' alt="Http mean times (ms)" title="Http mean times (ms)"/></a>
+<a href='?part=graph&amp;graph=httpSystemErrors'><img class='synthese' src='?width=200&amp;height=50&amp;graph=httpSystemErrors' alt="% of http errors" title="% of http errors"/></a>
+<br/>
+<a href='?part=graph&amp;graph=sqlHitsRate'><img class='synthese' src='?width=200&amp;height=50&amp;graph=sqlHitsRate' alt="Sql hits per minute" title="Sql hits per minute"/></a>
+<a href='?part=graph&amp;graph=sqlMeanTimes'><img class='synthese' src='?width=200&amp;height=50&amp;graph=sqlMeanTimes' alt="Sql mean times (ms)" title="Sql mean times (ms)"/></a>
+<a href='?part=graph&amp;graph=sqlSystemErrors'><img class='synthese' src='?width=200&amp;height=50&amp;graph=sqlSystemErrors' alt="% of sql errors" title="% of sql errors"/></a>
+<br/>
+<div align='right'>
+<a href="javascript:showHide('detailsGraphs');" class='noPrint'><img id='detailsGraphsImg' src='?resource=bullets/plus.png' alt=''/> Other charts</a>
+</div>
+<div id='detailsGraphs' style='display: none;'><div>
+<a href='?part=graph&amp;graph=gc'><img class='synthese' src='?width=200&amp;height=50&amp;graph=gc' alt="% Garbage Collector time" title="% Garbage Collector time"/></a>
+<a href='?part=graph&amp;graph=threadCount'><img class='synthese' src='?width=200&amp;height=50&amp;graph=threadCount' alt="Threads count" title="Threads count"/></a>
+<a href='?part=graph&amp;graph=loadedClassesCount'><img class='synthese' src='?width=200&amp;height=50&amp;graph=loadedClassesCount' alt="Loaded classes count" title="Loaded classes count"/></a>
+<br/>
+<a href='?part=graph&amp;graph=usedNonHeapMemory'><img class='synthese' src='?width=200&amp;height=50&amp;graph=usedNonHeapMemory' alt="Used non heap memory" title="Used non heap memory"/></a>
+<a href='?part=graph&amp;graph=usedPhysicalMemorySize'><img class='synthese' src='?width=200&amp;height=50&amp;graph=usedPhysicalMemorySize' alt="Used physical memory" title="Used physical memory"/></a>
+<a href='?part=graph&amp;graph=usedSwapSpaceSize'><img class='synthese' src='?width=200&amp;height=50&amp;graph=usedSwapSpaceSize' alt="Used swap space" title="Used swap space"/></a>
+<br/>
+<a href='?part=graph&amp;graph=httpSessionsMeanAge'><img class='synthese' src='?width=200&amp;height=50&amp;graph=httpSessionsMeanAge' alt="Mean age of http sessions (min)" title="Mean age of http sessions (min)"/></a>
+<a href='?part=graph&amp;graph=transactionsRate'><img class='synthese' src='?width=200&amp;height=50&amp;graph=transactionsRate' alt="Transactions per minute" title="Transactions per minute"/></a>
+<a href='?part=graph&amp;graph=Free_disk_space'><img class='synthese' src='?width=200&amp;height=50&amp;graph=Free_disk_space' alt="Free disk space" title="Free disk space"/></a>
+<br/>
+<a href='?part=graph&amp;graph=tomcatBusyThreads'><img class='synthese' src='?width=200&amp;height=50&amp;graph=tomcatBusyThreads' alt="Tomcat busy threads" title="Tomcat busy threads"/></a>
+<a href='?part=graph&amp;graph=tomcatBytesReceived'><img class='synthese' src='?width=200&amp;height=50&amp;graph=tomcatBytesReceived' alt="Bytes received per minute" title="Bytes received per minute"/></a>
+<a href='?part=graph&amp;graph=tomcatBytesSent'><img class='synthese' src='?width=200&amp;height=50&amp;graph=tomcatBytesSent' alt="Bytes sent per minute" title="Bytes sent per minute"/></a>
+<br/>
+</div></div>
+</div>
+<h3 class='chapterTitle'><img src='?resource=dbweb.png' alt='http'/>
+<a name='http'></a>Statistics http - 1 day</h3>
+None
+<h3 class='chapterTitle'><img src='?resource=db.png' alt='sql'/>
+<a name='sql'></a>Statistics sql - 1 day</h3>
+None
+<h3 class='chapterTitle'><img src='?resource=error.png' alt='error'/>
+<a name='error'></a>Statistics http system errors - 1 day</h3>
+None
+<h3 class='chapterTitle'><img src='?resource=log.png' alt='log'/>
+<a name='log'></a>Statistics system errors logs - 1 day</h3>
+None
+<h3 class='chapterTitle'><img src='?resource=hourglass.png' alt='Current requests'/>
+<a name='currentRequests'></a>Current requests</h3>
+None
+<h3 class='chapterTitle'><img src='?resource=systeminfo.png' alt='System information'/>
+<a name='systeminfo'></a>System information</h3>
+<div align='center' class='noPrint'>
+<a href='?action=gc' onclick="javascript:return confirm('Do you confirm execution of the garbage collector (GC) ?\n(this can take some seconds)');"><img src='?resource=broom.png' width='20' height='20' alt='Execute the garbage collector' /> Execute the garbage collector</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='?action=heap_dump' onclick="javascript:return confirm('Do you confirm the generation of a heap dump of the server ?\n(this can take some minutes)');"><img src='?resource=heapdump.png' width='20' height='20' alt="Generate a heap dump" /> Generate a heap dump</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='?part=heaphisto'><img src='?resource=memory.png' width='20' height='20' alt="View memory histogram" /> View memory histogram</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='?action=invalidate_sessions' onclick="javascript:return confirm('Do you confirm the invalidation of http sessions ?\n(users will have to reconnect)');"><img src='?resource=user-trash.png' width='18' height='18' alt="Invalidate http sessions" /> Invalidate http sessions</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='?part=sessions'><img src='?resource=system-users.png' width='20' height='20' alt="View http sessions" /> View http sessions</a>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='?part=web.xml'><img src='?resource=xml.png' width='20' height='20' alt="View deployment descriptor" /> View deployment descriptor</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='?part=mbeans'><img src='?resource=mbeans.png' width='20' height='20' alt="MBeans" /> MBeans</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='?part=processes'><img src='?resource=processes.png' width='20' height='20' alt="View OS processes" /> View OS processes</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='?part=jndi'><img src='?resource=jndi.png' width='20' height='20' alt="JNDI tree" /> JNDI tree</a><br/></div>
+<table align='left' border='0' summary='System information'>
+<tr><td>Host: </td><td><b>Adam-PC@10.132.86.68</b></td> </tr>
+<tr><td>Java memory used: </td><td><a class='tooltip' href='?part=graph&amp;graph=usedMemory' onmouseover="document.getElementById('idusedMemory').src='?graph=usedMemory&amp;width=100&amp;height=50'; this.onmouseover=null;" ><em><img src='?resource=systeminfo.png' id='idusedMemory' alt='graph'/></em>1,794</a> Mb / 2,019 Mb&nbsp;&nbsp;&nbsp;</td><td>
+<img src='?resource=bar/rb_a.gif' alt='+' title='88.89%' /><img src='?resource=bar/rb_5.gif' alt='+' title='88.89%' /><img src='?resource=bar/rb_5.gif' alt='+' title='88.89%' /><img src='?resource=bar/rb_5.gif' alt='+' title='88.89%' /><img src='?resource=bar/rb_5.gif' alt='+' title='88.89%' /><img src='?resource=bar/rb_5.gif' alt='+' title='88.89%' /><img src='?resource=bar/rb_5.gif' alt='+' title='88.89%' /><img src='?resource=bar/rb_5.gif' alt='+' title='88.89%' /><img src='?resource=bar/rb_5.gif' alt='+' title='88.89%' /><img src='?resource=bar/rb_4.gif' alt='+' title='88.89%' /><img src='?resource=bar/rb_0.gif' alt='+' title='88.89%' /><img src='?resource=bar/rb_b0.gif' alt='+' title='88.89%' />
+</td> </tr>
+<tr><td>Nb of http sessions: </td><td><a class='tooltip' href='?part=graph&amp;graph=httpSessions' onmouseover="document.getElementById('idhttpSessions').src='?graph=httpSessions&amp;width=100&amp;height=50'; this.onmouseover=null;" ><em><img src='?resource=systeminfo.png' id='idhttpSessions' alt='graph'/></em>0</a></td><td></td> </tr>
+<tr><td>Nb of active threads<br/>(current http requests): </td><td><a class='tooltip' href='?part=graph&amp;graph=activeThreads' onmouseover="document.getElementById('idactiveThreads').src='?graph=activeThreads&amp;width=100&amp;height=50'; this.onmouseover=null;" ><em><img src='?resource=systeminfo.png' id='idactiveThreads' alt='graph'/></em>0</a></td><td></td> </tr>
+<tr><td>Nb of active jdbc connections: </td><td><a class='tooltip' href='?part=graph&amp;graph=activeConnections' onmouseover="document.getElementById('idactiveConnections').src='?graph=activeConnections&amp;width=100&amp;height=50'; this.onmouseover=null;" ><em><img src='?resource=systeminfo.png' id='idactiveConnections' alt='graph'/></em>0</a></td><td></td> </tr>
+<tr><td>Nb of used jdbc connections<br/>(opened if no datasource): </td><td><a class='tooltip' href='?part=graph&amp;graph=usedConnections' onmouseover="document.getElementById('idusedConnections').src='?graph=usedConnections&amp;width=100&amp;height=50'; this.onmouseover=null;" ><em><img src='?resource=systeminfo.png' id='idusedConnections' alt='graph'/></em>0</a></td> </tr>
+</table>
+<br/><br/><br/><br/><br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="javascript:showHide('detailsJava');" class='noPrint'><img id='detailsJavaImg' src='?resource=bullets/plus.png' alt=''/> Details</a>
+<br/><br/><br/>
+<div id='detailsJava' style='display: none;'><div>
+<table align='left' border='0' summary='System details'>
+<tr><td>OS: </td><td>
+<img src='?resource=servers/windows.png' alt='OS'/>
+Windows 7, Service Pack 1, amd64/64 (4 cores)</td></tr>
+<tr><td>Java: </td><td>Java(TM) SE Runtime Environment, 1.8.0_112-b15</td></tr>
+<tr><td>JVM: </td><td>Java HotSpot(TM) 64-Bit Server VM, 25.112-b15, mixed mode</td></tr>
+<tr><td>PID of process: </td><td>1456</td></tr>
+<tr><td>Server: </td><td>
+<img src='?resource=servers/tomcat.png' alt='Server'/>
+Apache Tomcat/8.0.23 </td></tr>
+<tr><td>Webapp context: </td><td>/fsm-mobile </td></tr>
+<tr><td>Start: </td><td>2/2/17 3:02 PM</td></tr>
+<tr><td valign='top'>JVM arguments: </td><td>-agentlib:jdwp=transport=dt_socket,address=127.0.0.1:49223,suspend=y,server=n<br/>-javaagent:C:\Users\Adam\.IntelliJIdea2016.3\system\groovyHotSwap\gragent.jar<br/>-Xms2048m<br/>-Xmx2048m<br/>-XX:MaxPermSize=2048m<br/>-XX:PermSize=2048m<br/>-Duser.timezone=UTC<br/>-Dcom.sun.management.jmxremote=<br/>-Dcom.sun.management.jmxremote.port=1099<br/>-Dcom.sun.management.jmxremote.ssl=false<br/>-Dcom.sun.management.jmxremote.authenticate=false<br/>-Djava.rmi.server.hostname=127.0.0.1<br/>-Djava.util.logging.config.file=C:\Users\Adam\.IntelliJIdea2016.3\system\tomcat\Unnamed_Megafon\conf\logging.properties<br/>-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager<br/>-Djava.endorsed.dirs=C:\apache-tomcat-8.0.23\endorsed<br/>-Dcatalina.base=C:\Users\Adam\.IntelliJIdea2016.3\system\tomcat\Unnamed_Megafon<br/>-Dcatalina.home=C:\apache-tomcat-8.0.23<br/>-Djava.io.tmpdir=C:\apache-tomcat-8.0.23\temp</td></tr>
+<tr><td>Mean age of http sessions (min): </td><td><a class='tooltip' href='?part=graph&amp;graph=httpSessionsMeanAge' onmouseover="document.getElementById('idhttpSessionsMeanAge').src='?graph=httpSessionsMeanAge&amp;width=100&amp;height=50'; this.onmouseover=null;" ><em><img src='?resource=systeminfo.png' id='idhttpSessionsMeanAge' alt='graph'/></em>-1</a></td></tr>
+<tr><td valign='top'>Tomcat "http-apr-8080": </td><td>Busy threads = 
+<a class='tooltip' href='?part=graph&amp;graph=tomcatBusyThreads' onmouseover="document.getElementById('idtomcatBusyThreads').src='?graph=tomcatBusyThreads&amp;width=100&amp;height=50'; this.onmouseover=null;" ><em><img src='?resource=systeminfo.png' id='idtomcatBusyThreads' alt='graph'/></em>0</a> /  200
+&nbsp;&nbsp;&nbsp;
+<img src='?resource=bar/rb_a0.gif' alt='+' title='0.00%' /><img src='?resource=bar/rb_0.gif' alt='+' title='0.00%' /><img src='?resource=bar/rb_0.gif' alt='+' title='0.00%' /><img src='?resource=bar/rb_0.gif' alt='+' title='0.00%' /><img src='?resource=bar/rb_0.gif' alt='+' title='0.00%' /><img src='?resource=bar/rb_0.gif' alt='+' title='0.00%' /><img src='?resource=bar/rb_0.gif' alt='+' title='0.00%' /><img src='?resource=bar/rb_0.gif' alt='+' title='0.00%' /><img src='?resource=bar/rb_0.gif' alt='+' title='0.00%' /><img src='?resource=bar/rb_0.gif' alt='+' title='0.00%' /><img src='?resource=bar/rb_0.gif' alt='+' title='0.00%' /><img src='?resource=bar/rb_b0.gif' alt='+' title='0.00%' />
+<br/>Bytes received = 
+<a class='tooltip' href='?part=graph&amp;graph=tomcatBytesReceived' onmouseover="document.getElementById('idtomcatBytesReceived').src='?graph=tomcatBytesReceived&amp;width=100&amp;height=50'; this.onmouseover=null;" ><em><img src='?resource=systeminfo.png' id='idtomcatBytesReceived' alt='graph'/></em>592</a><br/>Bytes sent = 
+<a class='tooltip' href='?part=graph&amp;graph=tomcatBytesSent' onmouseover="document.getElementById('idtomcatBytesSent').src='?graph=tomcatBytesSent&amp;width=100&amp;height=50'; this.onmouseover=null;" ><em><img src='?resource=systeminfo.png' id='idtomcatBytesSent' alt='graph'/></em>65,990</a><br/>Request count = 
+27
+<br/>Error count = 
+2
+<br/>Sum of processing times (ms) = 
+40,898
+<br/>Max processing time (ms) = 
+23,573
+</td> </tr>
+<tr><td valign='top'>Memory: </td><td>Non heap memory = 513 Mb (Perm Gen, Code Cache),<br/>Loaded classes = 57,342,<br/>Garbage collection time = 24,608 ms,<br/>Process cpu time = 1,092,147 ms,<br/>Committed virtual memory = 3,138 Mb,<br/>Free physical memory = 897 Mb,<br/>Total physical memory = 8,135 Mb,<br/>Free swap space = 7,307 Mb,<br/>Total swap space = 16,269 Mb</td></tr>
+<tr><td>Free disk space: </td><td>351,021 Mb </td></tr>
+<tr><td valign='top'>Dependencies: </td><td>
+247 dependencies
+ ; &nbsp;&nbsp;&nbsp;
+<a href="javascript:showHide('detailsDependencies1');" class='noPrint'><img id='detailsDependencies1Img' src='?resource=bullets/plus.png' alt=''/> Details</a>
+<br/>
+<div id='detailsDependencies1' style='display: none;'><div>
+activation-1.1.jar,<br/>activemq-broker-5.10.0.jar,<br/>activemq-client-5.10.0.jar,<br/>activemq-openwire-legacy-5.10.0.jar,<br/>antlr-2.7.7.jar,<br/>aopalliance-1.0.jar,<br/>api-4.6.3.7.23-SNAPSHOT.jar,<br/>asm-5.0.4.jar,<br/>aspectjrt-1.8.0.M1.jar,<br/>aspectjweaver-1.8.0.M1.jar,<br/>attachment-4.6.3.7.23-SNAPSHOT.jar,<br/>audit-4.6.3.7.23-SNAPSHOT.jar,<br/>be-impl-4.6.3.7.23-SNAPSHOT.jar,<br/>bridge-method-annotation-1.13.jar,<br/>calendar-4.6.3.7.23-SNAPSHOT.jar,<br/>castor-1.2.jar,<br/>cglib-nodep-2.1_3.jar,<br/>commons-beanutils-1.8.0.jar,<br/>commons-beanutils-core-1.8.3.jar,<br/>commons-chain-1.2.jar,<br/>commons-codec-1.5.jar,<br/>commons-collections-3.2.1.jar,<br/>commons-digester-2.1.jar,<br/>commons-exec-1.3.jar,<br/>commons-fe-4.6.3.7.23-SNAPSHOT.jar,<br/>commons-graph-0.8.1.jar,<br/>commons-io-2.4.jar,<br/>commons-lang-2.6.jar,<br/>commons-lang3-3.4.jar,<br/>commons-logging-1.2.jar,<br/>commons-math3-3.3.jar,<br/>commons-rest-ws-4.6.3.7.23-SNAPSHOT.jar,<br/>company-structure-4.6.3.7.23-SNAPSHOT.jar,<br/>configuration-4.6.3.7.23-SNAPSHOT.jar,<br/>contact-4.6.3.7.23-SNAPSHOT.jar,<br/>core-4.6.3.7.23-SNAPSHOT.jar,<br/>cssparser-0.9.18.jar,<br/>custom-property-4.6.3.7.23-SNAPSHOT.jar,<br/>customer-4.6.3.7.23-SNAPSHOT.jar,<br/>cxf-core-3.1.6.jar,<br/>cxf-rt-bindings-soap-3.1.6.jar,<br/>cxf-rt-bindings-xml-3.1.6.jar,<br/>cxf-rt-databinding-jaxb-3.1.6.jar,<br/>cxf-rt-frontend-jaxrs-3.1.6.jar,<br/>cxf-rt-frontend-jaxws-3.1.6.jar,<br/>cxf-rt-frontend-simple-3.1.6.jar,<br/>cxf-rt-rs-client-3.1.6.jar,<br/>cxf-rt-transports-http-3.1.6.jar,<br/>cxf-rt-ws-addr-3.1.6.jar,<br/>cxf-rt-ws-policy-3.1.6.jar,<br/>cxf-rt-wsdl-3.1.6.jar,<br/>data-finder-4.6.3.7.23-SNAPSHOT.jar,<br/>data-finder-api-4.6.3.7.23-SNAPSHOT.jar,<br/>data-finder-utils-4.6.3.7.23-SNAPSHOT.jar,<br/>data-import-4.6.3.7.23-SNAPSHOT.jar,<br/>data-retention-4.6.3.7.23-SNAPSHOT.jar,<br/>dictionary-4.6.3.7.23-SNAPSHOT.jar,<br/>dispatcher-4.6.3.7.23-SNAPSHOT.jar,<br/>dom4j-1.6.1.jar,<br/>ehcache-2.7.2.jar,<br/>employee-4.6.3.7.23-SNAPSHOT.jar,<br/>flow-4.6.3.7.23-SNAPSHOT.jar,<br/>forecasting-4.6.3.7.23-SNAPSHOT.jar,<br/>genrap-api-1.3-SIGN.jar,<br/>genrap-core-1.5-SIGN.jar,<br/>genrap-ocean-1.3-SIGN.jar,<br/>genrap-schema-1.3-SIGN.jar,<br/>genrap-seeshell-1.3-SIGN.jar,<br/>genrap-uiij2se-1.3-SIGN.jar,<br/>geronimo-j2ee-management_1.1_spec-1.0.1.jar,<br/>geronimo-jms_1.1_spec-1.1.1.jar,<br/>gis-4.6.3.7.23-SNAPSHOT.jar,<br/>gis-google-4.6.3.7.23-SNAPSHOT.jar,<br/>gis-mgis-4.6.3.7.23-SNAPSHOT.jar,<br/>gis-yandex-4.6.3.7.23-SNAPSHOT.jar,<br/>google-maps-services-0.1.15.jar,<br/>groovy-all-2.3.6.jar,<br/>gson-2.6.2.jar,<br/>guava-18.0.jar,<br/>hawtbuf-1.10.jar,<br/>helper-4.6.3.7.23-SNAPSHOT.jar,<br/>hibernate-commons-annotations-4.0.2.Final.jar,<br/>hibernate-core-4.2.15.Final.jar,<br/>hibernate-ehcache-4.2.15.Final.jar,<br/>hibernate-jpa-2.0-api-1.0.1.Final.jar,<br/>hibernate-validator-4.3.1.Final.jar,<br/>history-4.6.3.7.23-SNAPSHOT.jar,<br/>htmlunit-2.21.jar,<br/>htmlunit-core-js-2.17.jar,<br/>htmlunit-driver-2.21.jar,<br/>httpclient-4.5.2.jar,<br/>httpcore-4.4.4.jar,<br/>httpmime-4.5.2.jar,<br/>integration-commons-4.6.3.7.23-SNAPSHOT.jar,<br/>internal-api-4.6.3.7.23-SNAPSHOT.jar,<br/>itext-2.1.7.js1.jar,<br/>jackson-annotations-2.1.4.jar,<br/>jackson-core-2.1.4.jar,<br/>jackson-core-asl-1.4.0.jar,<br/>jackson-databind-2.1.4.jar,<br/>jackson-jaxrs-json-provider-2.1.4.jar,<br/>jackson-mapper-asl-1.4.0.jar,<br/>jackson-module-jaxb-annotations-2.1.4.jar,<br/>jasperreports-4.8.0.jar,<br/>jasperreports-fonts-4.0.1.jar,<br/>javamelody-core-1.55.0.jar,<br/>javassist-3.18.1-GA.jar,<br/>javax.annotation-api-1.2.jar,<br/>javax.ws.rs-api-2.0.1.jar,<br/>jaxb-core-2.2.11.jar,<br/>jaxb-impl-2.2.11.jar,<br/>jboss-logging-3.1.0.GA.jar,<br/>jboss-transaction-api_1.1_spec-1.0.1.Final.jar,<br/>jcl-over-slf4j-1.7.2.jar,<br/>jcommon-1.0.15.jar,<br/>jdtcore-3.1.0.jar,<br/>jetty-io-9.2.15.v20160210.jar,<br/>jetty-util-9.2.15.v20160210.jar,<br/>jfreechart-1.0.12.jar,<br/>jms-1.1.jar,<br/>jna-4.1.0.jar,<br/>jna-platform-4.1.0.jar,<br/>joda-time-2.4.jar,<br/>joda-time-2.9.2.jar,<br/>jrobin-1.5.9.jar,<br/>jsr305-1.3.9.jar,<br/>jul-to-slf4j-1.7.2.jar,<br/>location-4.6.3.7.23-SNAPSHOT.jar,<br/>log4j-1.2.17.jar,<br/>lombok-1.16.10.jar,<br/>mail-1.4.5.jar,<br/>megafon-api-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-attachment-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-calendar-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-company-structure-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-core-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-custom-property-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-data-finder-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-data-finder-api-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-data-finders-utils-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-dispatcher-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-employee-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-flow-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-gis-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-gis-mgis-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-internal-api-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-location-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-mobile-api-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-mobile-dto-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-mobile-impl-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-model-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-notification-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-security-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-servicebox-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-serviceregion-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-warehouse-4.6.3.7.23-SNAPSHOT.jar,<br/>megafon-work-order-4.6.3.7.23-SNAPSHOT.jar,<br/>mobile-api-4.6.3.7.23-SNAPSHOT.jar,<br/>mobile-dto-4.6.3.7.23-SNAPSHOT.jar,<br/>mobile-impl-4.6.3.7.23-SNAPSHOT.jar,<br/>mobile-synchronization-4.6.3.7.23-SNAPSHOT.jar,<br/>model-4.6.3.7.23-SNAPSHOT.jar,<br/>mysema-commons-lang-0.2.4.jar,<br/>neethi-3.0.3.jar,<br/>neko-htmlunit-2.21.jar,<br/>notification-4.6.3.7.23-SNAPSHOT.jar,<br/>ojdbc7-12.1.0.1.jar,<br/>okhttp-2.7.5.jar,<br/>okio-1.6.0.jar,<br/>org.apache.servicemix.bundles.java-apns-0.1.6_3.jar,<br/>org.apache.servicemix.bundles.javax-inject-1_2.jar,<br/>poi-3.10-FINAL.jar,<br/>poi-ooxml-3.10-FINAL.jar,<br/>poi-ooxml-schemas-3.10-FINAL.jar,<br/>quartz-2.2.2.jar,<br/>querydsl-core-3.6.0.jar,<br/>querydsl-sql-3.6.0.jar,<br/>reflections-0.9.9-RC1.jar,<br/>report-4.6.3.7.23-SNAPSHOT.jar,<br/>sac-1.3.jar,<br/>security-4.6.3.7.23-SNAPSHOT.jar,<br/>selenium-api-2.53.0.jar,<br/>selenium-chrome-driver-2.53.0.jar,<br/>selenium-edge-driver-2.53.0.jar,<br/>selenium-firefox-driver-2.53.0.jar,<br/>selenium-ie-driver-2.53.0.jar,<br/>selenium-java-2.53.0.jar,<br/>selenium-leg-rc-2.53.0.jar,<br/>selenium-remote-driver-2.53.0.jar,<br/>selenium-support-2.53.0.jar,<br/>serializer-2.7.2.jar,<br/>servicebox-4.6.3.7.23-SNAPSHOT.jar,<br/>serviceregion-4.6.3.7.23-SNAPSHOT.jar,<br/>settings-4.6.3.7.23-SNAPSHOT.jar,<br/>slf4j-api-1.7.2.jar,<br/>slf4j-log4j12-1.7.2.jar,<br/>spring-aop-4.2.6.RELEASE.jar,<br/>spring-beans-4.2.6.RELEASE.jar,<br/>spring-context-4.2.6.RELEASE.jar,<br/>spring-context-support-4.2.6.RELEASE.jar,<br/>spring-core-4.2.6.RELEASE.jar,<br/>spring-data-jdbc-core-1.1.0.RELEASE.jar,<br/>spring-data-oracle-1.1.0.RELEASE.jar,<br/>spring-expression-4.2.6.RELEASE.jar,<br/>spring-jdbc-4.2.6.RELEASE.jar,<br/>spring-jms-4.2.6.RELEASE.jar,<br/>spring-ldap-core-1.3.2.RELEASE.jar,<br/>spring-messaging-4.2.6.RELEASE.jar,<br/>spring-orm-4.2.6.RELEASE.jar,<br/>spring-oxm-4.2.6.RELEASE.jar,<br/>spring-retry-1.0.3.RELEASE.jar,<br/>spring-security-config-3.2.3.RELEASE.jar,<br/>spring-security-core-3.2.3.RELEASE.jar,<br/>spring-security-kerberos-core-1.0.1.RELEASE.jar,<br/>spring-security-kerberos-web-1.0.1.RELEASE.jar,<br/>spring-security-ldap-3.2.3.RELEASE.jar,<br/>spring-security-web-3.2.3.RELEASE.jar,<br/>spring-tx-4.2.6.RELEASE.jar,<br/>spring-web-4.2.6.RELEASE.jar,<br/>spring-webmvc-4.2.6.RELEASE.jar,<br/>stax-api-1.0.1.jar,<br/>stax2-api-3.1.4.jar,<br/>survey-4.6.3.7.23-SNAPSHOT.jar,<br/>system-message-4.6.3.7.23-SNAPSHOT.jar,<br/>tomcat-jdbc-8.0.33.jar,<br/>tomcat-juli-8.0.33.jar,<br/>utils-4.6.3.7.23-SNAPSHOT.jar,<br/>validation-api-1.0.0.GA.jar,<br/>velocity-1.7.jar,<br/>velocity-tools-1.4.jar,<br/>view-configuration-4.6.3.7.23-SNAPSHOT.jar,<br/>warehouse-4.6.3.7.23-SNAPSHOT.jar,<br/>websocket-api-9.2.15.v20160210.jar,<br/>websocket-client-9.2.15.v20160210.jar,<br/>websocket-common-9.2.15.v20160210.jar,<br/>woodstox-core-asl-4.4.1.jar,<br/>work-order-4.6.3.7.23-SNAPSHOT.jar,<br/>wsdl4j-1.6.3.jar,<br/>xalan-2.7.2.jar,<br/>xercesImpl-2.8.0.jar,<br/>xml-apis-1.4.01.jar,<br/>xml-resolver-1.2.jar,<br/>xmlbeans-2.3.0.jar,<br/>xmlpull-1.1.3.1.jar,<br/>xmlschema-core-2.2.1.jar,<br/>xpp3_min-1.1.4c.jar,<br/>xstream-1.4.7.jar
+</div></div>
+</td></tr>
+</table>
+</div></div>
+<h3 class='chapterTitle' style='clear:both;'><img src='?resource=threads.png' alt='Threads'/>
+<a name='threads'></a>Threads</h3>
+<b>Threads on Adam-PC@10.132.86.68: </b>Number = 508, Maximum = 520, Total started = 659
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='?part=threads' class='noPrint'>Details</a><br/>
+<h3 class='chapterTitle'><img src='?resource=caches.png' alt='Data caches'/>
+<a name='caches'></a>Data caches</h3>
+<b>
+107 cache(s) on Adam-PC@10.132.86.68
+</b>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="javascript:showHide('caches_0');" class='noPrint'><img id='caches_0Img' src='?resource=bullets/plus.png' alt=''/> Details</a>
+<br/><br/><div id='caches_0' style='display: none;'><div>
+<table class='sortable' width='100%' border='1' summary='Data caches'>
+<thead><tr><th>Cache</th><th class='sorttable_numeric'>% used of memory cache</th><th class='sorttable_numeric'>Number of objects in memory</th><th class='sorttable_numeric'>Number of objects on disk</th><th class='sorttable_numeric'>% of efficiency of memory cache<br/>(memory hits/hits)</th><th class='sorttable_numeric'>% of efficiency of cache<br/>(hits/accesses)</th><th>Configuration</th><th class='noPrint'>Clear</th></tr></thead><tbody>
+<tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>avatar.by.resource.id</td> <td align='right'>0</td> <td align='right'>1</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=avatar.by.resource.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache avatar.by.resource.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;avatar.by.resource.id' title='Clear&nbsp;the&nbsp;cache&nbsp;avatar.by.resource.id' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>avatar.by.user.id</td> <td align='right'>0</td> <td align='right'>1</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=avatar.by.user.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache avatar.by.user.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;avatar.by.user.id' title='Clear&nbsp;the&nbsp;cache&nbsp;avatar.by.user.id' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>avatar.miniature.by.resource.id</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=avatar.miniature.by.resource.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache avatar.miniature.by.resource.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;avatar.miniature.by.resource.id' title='Clear&nbsp;the&nbsp;cache&nbsp;avatar.miniature.by.resource.id' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>cfg.view.component.configuration.findAllConfigurations</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=cfg.view.component.configuration.findAllConfigurations' onclick="javascript:return confirm('Do you confirm the clearing of the cache cfg.view.component.configuration.findAllConfigurations?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;cfg.view.component.configuration.findAllConfigurations' title='Clear&nbsp;the&nbsp;cache&nbsp;cfg.view.component.configuration.findAllConfigurations' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>cfg.view.component.configuration.getComponentConfiguration</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=cfg.view.component.configuration.getComponentConfiguration' onclick="javascript:return confirm('Do you confirm the clearing of the cache cfg.view.component.configuration.getComponentConfiguration?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;cfg.view.component.configuration.getComponentConfiguration' title='Clear&nbsp;the&nbsp;cache&nbsp;cfg.view.component.configuration.getComponentConfiguration' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>cfg.view.component.sequence</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=cfg.view.component.sequence' onclick="javascript:return confirm('Do you confirm the clearing of the cache cfg.view.component.sequence?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;cfg.view.component.sequence' title='Clear&nbsp;the&nbsp;cache&nbsp;cfg.view.component.sequence' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>cfg.view.component.typeAwareMap</td> <td align='right'>0</td> <td align='right'>1</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=cfg.view.component.typeAwareMap' onclick="javascript:return confirm('Do you confirm the clearing of the cache cfg.view.component.typeAwareMap?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;cfg.view.component.typeAwareMap' title='Clear&nbsp;the&nbsp;cache&nbsp;cfg.view.component.typeAwareMap' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>com.comarch.fsm.be.employee.resource.Resource</td> <td align='right'>9</td> <td align='right'>928</td> <td align='right'>0</td> <td align='right'>100</td> <td align='right'>76</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=com.comarch.fsm.be.employee.resource.Resource' onclick="javascript:return confirm('Do you confirm the clearing of the cache com.comarch.fsm.be.employee.resource.Resource?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.employee.resource.Resource' title='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.employee.resource.Resource' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>com.comarch.fsm.be.flow.status.config.StatusTransition</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=com.comarch.fsm.be.flow.status.config.StatusTransition' onclick="javascript:return confirm('Do you confirm the clearing of the cache com.comarch.fsm.be.flow.status.config.StatusTransition?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.flow.status.config.StatusTransition' title='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.flow.status.config.StatusTransition' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>com.comarch.fsm.be.flow.status.config.StatusTransition.availableRoles</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=com.comarch.fsm.be.flow.status.config.StatusTransition.availableRoles' onclick="javascript:return confirm('Do you confirm the clearing of the cache com.comarch.fsm.be.flow.status.config.StatusTransition.availableRoles?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.flow.status.config.StatusTransition.availableRoles' title='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.flow.status.config.StatusTransition.availableRoles' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>com.comarch.fsm.be.flow.status.StatusFlow</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=com.comarch.fsm.be.flow.status.StatusFlow' onclick="javascript:return confirm('Do you confirm the clearing of the cache com.comarch.fsm.be.flow.status.StatusFlow?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.flow.status.StatusFlow' title='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.flow.status.StatusFlow' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>com.comarch.fsm.be.model.flow.StatusHandler</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=com.comarch.fsm.be.model.flow.StatusHandler' onclick="javascript:return confirm('Do you confirm the clearing of the cache com.comarch.fsm.be.model.flow.StatusHandler?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.model.flow.StatusHandler' title='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.model.flow.StatusHandler' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>com.comarch.fsm.be.model.location.AdministrationUnit</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=com.comarch.fsm.be.model.location.AdministrationUnit' onclick="javascript:return confirm('Do you confirm the clearing of the cache com.comarch.fsm.be.model.location.AdministrationUnit?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.model.location.AdministrationUnit' title='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.model.location.AdministrationUnit' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>com.comarch.fsm.be.model.location.Location</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=com.comarch.fsm.be.model.location.Location' onclick="javascript:return confirm('Do you confirm the clearing of the cache com.comarch.fsm.be.model.location.Location?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.model.location.Location' title='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.model.location.Location' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>com.comarch.fsm.be.model.user.User</td> <td align='right'>8</td> <td align='right'>837</td> <td align='right'>0</td> <td align='right'>100</td> <td align='right'>76</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=com.comarch.fsm.be.model.user.User' onclick="javascript:return confirm('Do you confirm the clearing of the cache com.comarch.fsm.be.model.user.User?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.model.user.User' title='Clear&nbsp;the&nbsp;cache&nbsp;com.comarch.fsm.be.model.user.User' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>dispatcher.canExecuteAdActionByMode</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=dispatcher.canExecuteAdActionByMode' onclick="javascript:return confirm('Do you confirm the clearing of the cache dispatcher.canExecuteAdActionByMode?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;dispatcher.canExecuteAdActionByMode' title='Clear&nbsp;the&nbsp;cache&nbsp;dispatcher.canExecuteAdActionByMode' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>dispatcher.priority.configurations</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=dispatcher.priority.configurations' onclick="javascript:return confirm('Do you confirm the clearing of the cache dispatcher.priority.configurations?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;dispatcher.priority.configurations' title='Clear&nbsp;the&nbsp;cache&nbsp;dispatcher.priority.configurations' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>dispatcher.sla.ordertype</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=dispatcher.sla.ordertype' onclick="javascript:return confirm('Do you confirm the clearing of the cache dispatcher.sla.ordertype?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;dispatcher.sla.ordertype' title='Clear&nbsp;the&nbsp;cache&nbsp;dispatcher.sla.ordertype' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>dispatcher.taskResourceQuantity</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=dispatcher.taskResourceQuantity' onclick="javascript:return confirm('Do you confirm the clearing of the cache dispatcher.taskResourceQuantity?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;dispatcher.taskResourceQuantity' title='Clear&nbsp;the&nbsp;cache&nbsp;dispatcher.taskResourceQuantity' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>dispatcher.tuning</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=dispatcher.tuning' onclick="javascript:return confirm('Do you confirm the clearing of the cache dispatcher.tuning?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;dispatcher.tuning' title='Clear&nbsp;the&nbsp;cache&nbsp;dispatcher.tuning' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.component.name</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.component.name' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.component.name?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.component.name' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.component.name' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.component.path</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.component.path' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.component.path?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.component.path' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.component.path' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.country.code</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.country.code' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.country.code?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.country.code' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.country.code' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.country.id</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.country.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.country.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.country.id' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.country.id' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.country.name</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.country.name' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.country.name?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.country.name' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.country.name' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.country.supportedCountries</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.country.supportedCountries' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.country.supportedCountries?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.country.supportedCountries' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.country.supportedCountries' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.customproperty.all</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.all' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.all?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.all' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.all' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.customproperty.code</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.code' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.code?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.code' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.code' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.customproperty.editableDefinitionsByTypeAndRole</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.editableDefinitionsByTypeAndRole' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.editableDefinitionsByTypeAndRole?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.editableDefinitionsByTypeAndRole' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.editableDefinitionsByTypeAndRole' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.customproperty.editableDefinitionsByTypeAndRoleAndStatus</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.editableDefinitionsByTypeAndRoleAndStatus' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.editableDefinitionsByTypeAndRoleAndStatus?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.editableDefinitionsByTypeAndRoleAndStatus' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.editableDefinitionsByTypeAndRoleAndStatus' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.customproperty.editableInstancesByTypeAndSection</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.editableInstancesByTypeAndSection' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.editableInstancesByTypeAndSection?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.editableInstancesByTypeAndSection' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.editableInstancesByTypeAndSection' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.customproperty.enabled</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.enabled' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.enabled?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.enabled' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.enabled' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.customproperty.id</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.id' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.id' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.customproperty.iseditable</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.iseditable' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.iseditable?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.iseditable' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.iseditable' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.customproperty.iseditable.instatus</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.iseditable.instatus' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.iseditable.instatus?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.iseditable.instatus' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.iseditable.instatus' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.customproperty.isrequired</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.isrequired' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.isrequired?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.isrequired' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.isrequired' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.customproperty.isrequired.instatus</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.isrequired.instatus' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.isrequired.instatus?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.isrequired.instatus' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.isrequired.instatus' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.customproperty.isvisible</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.isvisible' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.isvisible?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.isvisible' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.isvisible' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.customproperty.isvisible.instatus</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.isvisible.instatus' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.isvisible.instatus?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.isvisible.instatus' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.isvisible.instatus' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.customproperty.requiredDefinitionsByTypeAndRole</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.requiredDefinitionsByTypeAndRole' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.requiredDefinitionsByTypeAndRole?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.requiredDefinitionsByTypeAndRole' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.requiredDefinitionsByTypeAndRole' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.customproperty.requiredDefinitionsByTypeAndRoleAndStatus</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.requiredDefinitionsByTypeAndRoleAndStatus' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.requiredDefinitionsByTypeAndRoleAndStatus?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.requiredDefinitionsByTypeAndRoleAndStatus' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.requiredDefinitionsByTypeAndRoleAndStatus' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.customproperty.requiredInstancesByTypeAndSection</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.requiredInstancesByTypeAndSection' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.requiredInstancesByTypeAndSection?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.requiredInstancesByTypeAndSection' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.requiredInstancesByTypeAndSection' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.customproperty.visibleDefinitionsByTypeAndRole</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.visibleDefinitionsByTypeAndRole' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.visibleDefinitionsByTypeAndRole?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.visibleDefinitionsByTypeAndRole' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.visibleDefinitionsByTypeAndRole' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.customproperty.visibleDefinitionsByTypeAndRoleAndStatus</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.visibleDefinitionsByTypeAndRoleAndStatus' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.visibleDefinitionsByTypeAndRoleAndStatus?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.visibleDefinitionsByTypeAndRoleAndStatus' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.visibleDefinitionsByTypeAndRoleAndStatus' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.customproperty.visibleInstancesByTypeAndSection</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.customproperty.visibleInstancesByTypeAndSection' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.customproperty.visibleInstancesByTypeAndSection?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.visibleInstancesByTypeAndSection' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.customproperty.visibleInstancesByTypeAndSection' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.organizationunit.id</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.organizationunit.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.organizationunit.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.organizationunit.id' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.organizationunit.id' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.organizationunit.resource</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.organizationunit.resource' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.organizationunit.resource?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.organizationunit.resource' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.organizationunit.resource' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.policy.codesForRole</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.policy.codesForRole' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.policy.codesForRole?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.policy.codesForRole' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.policy.codesForRole' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.priority.all</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.priority.all' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.priority.all?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.priority.all' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.priority.all' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.priority.code</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.priority.code' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.priority.code?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.priority.code' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.priority.code' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.priority.id</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.priority.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.priority.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.priority.id' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.priority.id' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.priority.value</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.priority.value' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.priority.value?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.priority.value' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.priority.value' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.simpleEmployee</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.simpleEmployee' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.simpleEmployee?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.simpleEmployee' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.simpleEmployee' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.status.all</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.status.all' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.status.all?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.status.all' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.status.all' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.status.code</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.status.code' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.status.code?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.status.code' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.status.code' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.status.enabled</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.status.enabled' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.status.enabled?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.status.enabled' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.status.enabled' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.status.id</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.status.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.status.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.status.id' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.status.id' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.status.image</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.status.image' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.status.image?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.status.image' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.status.image' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.status.name</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.status.name' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.status.name?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.status.name' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.status.name' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.technology.all</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.technology.all' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.technology.all?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.technology.all' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.technology.all' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.technology.code</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.technology.code' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.technology.code?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.technology.code' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.technology.code' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.technology.enabled</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.technology.enabled' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.technology.enabled?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.technology.enabled' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.technology.enabled' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.technology.id</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.technology.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.technology.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.technology.id' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.technology.id' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.technology.name</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.technology.name' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.technology.name?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.technology.name' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.technology.name' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.type.task.all</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.type.task.all' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.type.task.all?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.task.all' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.task.all' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.type.task.code</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.type.task.code' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.type.task.code?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.task.code' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.task.code' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.type.task.id</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.type.task.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.type.task.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.task.id' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.task.id' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.type.workorder.all</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.type.workorder.all' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.type.workorder.all?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.all' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.all' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.type.workorder.browse</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.type.workorder.browse' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.type.workorder.browse?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.browse' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.browse' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.type.workorder.browse.code</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.type.workorder.browse.code' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.type.workorder.browse.code?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.browse.code' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.browse.code' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.type.workorder.browse.name</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.type.workorder.browse.name' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.type.workorder.browse.name?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.browse.name' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.browse.name' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.type.workorder.code</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.type.workorder.code' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.type.workorder.code?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.code' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.code' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.type.workorder.flowid</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.type.workorder.flowid' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.type.workorder.flowid?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.flowid' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.flowid' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.type.workorder.forweb</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.type.workorder.forweb' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.type.workorder.forweb?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.forweb' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.forweb' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.type.workorder.id</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.type.workorder.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.type.workorder.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.id' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.id' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.type.workorder.name</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.type.workorder.name' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.type.workorder.name?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.name' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.type.workorder.name' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.typeclass.task.code</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.typeclass.task.code' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.typeclass.task.code?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.typeclass.task.code' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.typeclass.task.code' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.typeclass.task.id</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.typeclass.task.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.typeclass.task.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.typeclass.task.id' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.typeclass.task.id' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>finder.typeclass.workorder.code</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.typeclass.workorder.code' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.typeclass.workorder.code?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.typeclass.workorder.code' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.typeclass.workorder.code' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>finder.typeclass.workorder.id</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=finder.typeclass.workorder.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache finder.typeclass.workorder.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;finder.typeclass.workorder.id' title='Clear&nbsp;the&nbsp;cache&nbsp;finder.typeclass.workorder.id' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>gis.real.routing</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=gis.real.routing' onclick="javascript:return confirm('Do you confirm the clearing of the cache gis.real.routing?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;gis.real.routing' title='Clear&nbsp;the&nbsp;cache&nbsp;gis.real.routing' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>gis.routing</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=gis.routing' onclick="javascript:return confirm('Do you confirm the clearing of the cache gis.routing?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;gis.routing' title='Clear&nbsp;the&nbsp;cache&nbsp;gis.routing' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>location.conf.avgSpeed</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=location.conf.avgSpeed' onclick="javascript:return confirm('Do you confirm the clearing of the cache location.conf.avgSpeed?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;location.conf.avgSpeed' title='Clear&nbsp;the&nbsp;cache&nbsp;location.conf.avgSpeed' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>location.conf.lowest.city.speed</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=location.conf.lowest.city.speed' onclick="javascript:return confirm('Do you confirm the clearing of the cache location.conf.lowest.city.speed?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;location.conf.lowest.city.speed' title='Clear&nbsp;the&nbsp;cache&nbsp;location.conf.lowest.city.speed' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>mobile.dictionaries.all</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=mobile.dictionaries.all' onclick="javascript:return confirm('Do you confirm the clearing of the cache mobile.dictionaries.all?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;mobile.dictionaries.all' title='Clear&nbsp;the&nbsp;cache&nbsp;mobile.dictionaries.all' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>organization.unit.location</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=organization.unit.location' onclick="javascript:return confirm('Do you confirm the clearing of the cache organization.unit.location?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;organization.unit.location' title='Clear&nbsp;the&nbsp;cache&nbsp;organization.unit.location' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>organization.unit.parent</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=organization.unit.parent' onclick="javascript:return confirm('Do you confirm the clearing of the cache organization.unit.parent?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;organization.unit.parent' title='Clear&nbsp;the&nbsp;cache&nbsp;organization.unit.parent' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>potential.fulfillment.resource</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=potential.fulfillment.resource' onclick="javascript:return confirm('Do you confirm the clearing of the cache potential.fulfillment.resource?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;potential.fulfillment.resource' title='Clear&nbsp;the&nbsp;cache&nbsp;potential.fulfillment.resource' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>resource.calendar.version</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=resource.calendar.version' onclick="javascript:return confirm('Do you confirm the clearing of the cache resource.calendar.version?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;resource.calendar.version' title='Clear&nbsp;the&nbsp;cache&nbsp;resource.calendar.version' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>resource.item.type</td> <td align='right'>16</td> <td align='right'>1,674</td> <td align='right'>0</td> <td align='right'>100</td> <td align='right'>62</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=resource.item.type' onclick="javascript:return confirm('Do you confirm the clearing of the cache resource.item.type?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;resource.item.type' title='Clear&nbsp;the&nbsp;cache&nbsp;resource.item.type' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>resource.organizationunit</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=resource.organizationunit' onclick="javascript:return confirm('Do you confirm the clearing of the cache resource.organizationunit?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;resource.organizationunit' title='Clear&nbsp;the&nbsp;cache&nbsp;resource.organizationunit' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>resource.service.region.by.service.region</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=resource.service.region.by.service.region' onclick="javascript:return confirm('Do you confirm the clearing of the cache resource.service.region.by.service.region?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;resource.service.region.by.service.region' title='Clear&nbsp;the&nbsp;cache&nbsp;resource.service.region.by.service.region' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>resource.serviceRegions</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=resource.serviceRegions' onclick="javascript:return confirm('Do you confirm the clearing of the cache resource.serviceRegions?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;resource.serviceRegions' title='Clear&nbsp;the&nbsp;cache&nbsp;resource.serviceRegions' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>resource.skills</td> <td align='right'>9</td> <td align='right'>922</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>0</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = true, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=resource.skills' onclick="javascript:return confirm('Do you confirm the clearing of the cache resource.skills?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;resource.skills' title='Clear&nbsp;the&nbsp;cache&nbsp;resource.skills' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>service.region.by.location</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=service.region.by.location' onclick="javascript:return confirm('Do you confirm the clearing of the cache service.region.by.location?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;service.region.by.location' title='Clear&nbsp;the&nbsp;cache&nbsp;service.region.by.location' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>sysparam</td> <td align='right'>0</td> <td align='right'>4</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=sysparam' onclick="javascript:return confirm('Do you confirm the clearing of the cache sysparam?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;sysparam' title='Clear&nbsp;the&nbsp;cache&nbsp;sysparam' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>task.additional.time.config</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=task.additional.time.config' onclick="javascript:return confirm('Do you confirm the clearing of the cache task.additional.time.config?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;task.additional.time.config' title='Clear&nbsp;the&nbsp;cache&nbsp;task.additional.time.config' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>task.skill.requirements</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=task.skill.requirements' onclick="javascript:return confirm('Do you confirm the clearing of the cache task.skill.requirements?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;task.skill.requirements' title='Clear&nbsp;the&nbsp;cache&nbsp;task.skill.requirements' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>task.time.config</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=task.time.config' onclick="javascript:return confirm('Do you confirm the clearing of the cache task.time.config?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;task.time.config' title='Clear&nbsp;the&nbsp;cache&nbsp;task.time.config' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>texture.by.cp.id</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=texture.by.cp.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache texture.by.cp.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;texture.by.cp.id' title='Clear&nbsp;the&nbsp;cache&nbsp;texture.by.cp.id' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>texture.by.status.id</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=texture.by.status.id' onclick="javascript:return confirm('Do you confirm the clearing of the cache texture.by.status.id?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;texture.by.status.id' title='Clear&nbsp;the&nbsp;cache&nbsp;texture.by.status.id' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>transition.exists</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=transition.exists' onclick="javascript:return confirm('Do you confirm the clearing of the cache transition.exists?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;transition.exists' title='Clear&nbsp;the&nbsp;cache&nbsp;transition.exists' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>transition.requirements.properties</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=transition.requirements.properties' onclick="javascript:return confirm('Do you confirm the clearing of the cache transition.requirements.properties?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;transition.requirements.properties' title='Clear&nbsp;the&nbsp;cache&nbsp;transition.requirements.properties' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>transition.requirements.script</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=transition.requirements.script' onclick="javascript:return confirm('Do you confirm the clearing of the cache transition.requirements.script?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;transition.requirements.script' title='Clear&nbsp;the&nbsp;cache&nbsp;transition.requirements.script' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>transition.visibility.properties</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=transition.visibility.properties' onclick="javascript:return confirm('Do you confirm the clearing of the cache transition.visibility.properties?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;transition.visibility.properties' title='Clear&nbsp;the&nbsp;cache&nbsp;transition.visibility.properties' /></a></td></tr><tr class='odd' onmouseover="this.className='highlight'" onmouseout="this.className='odd'">
+<td>tuning.all</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=tuning.all' onclick="javascript:return confirm('Do you confirm the clearing of the cache tuning.all?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;tuning.all' title='Clear&nbsp;the&nbsp;cache&nbsp;tuning.all' /></a></td></tr><tr onmouseover="this.className='highlight'" onmouseout="this.className=''">
+<td>workers.executive.roles</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>0</td> <td align='right'>-1</td> <td align='right'>-1</td> <td>ehcache [maxElementsInMemory = 10000, overflowToDisk = false, eternal = false, timeToLiveSeconds = 0, timeToIdleSeconds = 0, memoryStoreEvictionPolicy = LRU, diskPersistent = false]</td><td align='center' class='noPrint'><a href='?action=clear_cache&amp;cacheId=workers.executive.roles' onclick="javascript:return confirm('Do you confirm the clearing of the cache workers.executive.roles?');"><img src='?resource=user-trash.png' width='16' height='16' alt='Clear&nbsp;the&nbsp;cache&nbsp;workers.executive.roles' title='Clear&nbsp;the&nbsp;cache&nbsp;workers.executive.roles' /></a></td></tr></tbody></table>
+<div align='right' class='noPrint'><a href='?action=clear_caches' onclick="javascript:return confirm('Do you confirm the clearing of all caches?');">
+<img src='?resource=user-trash.png' width='18' height='18' alt="Clear all caches" /> Clear all caches</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='http://ehcache.org/apidocs/2.9/net/sf/ehcache/config/CacheConfiguration.html#field_summary'target='_blank'>Configuration reference</a></div>
+</div></div><br/>
+<script type='text/javascript'>
+function toggle(id) {
+var el = document.getElementById(id);
+if (el.getAttribute('class') == 'menuHide') {
+  el.setAttribute('class', 'menuShow');
+} else {
+  el.setAttribute('class', 'menuHide');
+} }
+</script>
+<div class='noPrint'> 
+<div id='menuBox' class='menuHide'>
+  <ul id='menuTab'><li><a href='javascript:toggle("menuBox");'><img id='menuToggle' src='?resource=menu.png' alt='menu' /></a></li></ul>
+  <div id='menuLinks'><div id='menuDeco'>
+    <div class='menuButton'><a href='#top'>Stats</a></div>
+    <div class='menuButton'><a href='#http'>Stats http</a></div>
+    <div class='menuButton'><a href='#sql'>Stats sql</a></div>
+    <div class='menuButton'><a href='#error'>Stats error</a></div>
+    <div class='menuButton'><a href='#log'>Stats log</a></div>
+    <div class='menuButton'><a href='#currentRequests'>Current requests</a></div>
+    <div class='menuButton'><a href='#systeminfo'>System information</a></div>
+    <div class='menuButton'><a href='#threads'>Threads</a></div>
+    <div class='menuButton'><a href='#caches'>Data caches</a></div>
+  </div></div>
+</div></div>
+<a name='bottom'></a>
+<br/><div style='font-size: 11px;'>
+Last collect time: 34 ms<br/>
+Display time: 75 ms<br/>
+Memory overhead estimate: < 1 Mb
+<br/>Disk usage: 1 Mb
+&nbsp;&nbsp;&nbsp;<a href='?action=purge_obsolete_files' class='noPrint'>
+<img width='14' height='14' src='?resource=user-trash.png' alt='Purge the obsolete files' title='Purge the obsolete files'/></a>
+<br/><br/>JavaMelody 1.55.0
+<br/>
+<a href="javascript:showHide('debuggingLogs');" class='noPrint'><img id='debuggingLogsImg' src='?resource=bullets/plus.png' alt=''/> Debugging logs</a>
+<br/><br/>
+<div id='debuggingLogs' style='display: none;'>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JavaMelody listener init started<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datasources found in JNDI: []<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JavaMelody listener init done in 29 ms<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JavaMelody filter init started<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OS: Windows 7 Service Pack 1, amd64/64<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java: Java(TM) SE Runtime Environment, 1.8.0_112-b15<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Server: Apache Tomcat/8.0.23<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Webapp context: /fsm-mobile<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JavaMelody version: 1.55.0<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JavaMelody classes loaded from: file:/C:/Users/Adam/Desktop/megafon%20git/fsm-megafon/frontend/mobile/mobile-server/target/fsm-mobile/WEB-INF/lib/javamelody-core-1.55.0.jar<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Host: Adam-PC@10.132.86.68<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameter defined: quartz-default-listener-disabled=true<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameter defined: authorized-users=admin:melody<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log listeners initialized<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datasources found in JNDI: []<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initialization of Quartz default listener has been disabled<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job global listener initialized<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counters initialized<br/>
+Thu Feb 02 15:02:20 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counters data read from files in C:\apache-tomcat-8.0.23\temp\javamelody\fsm-mobile_Adam-PC<br/>
+Thu Feb 02 15:02:21 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;collect task scheduled every 60s<br/>
+Thu Feb 02 15:02:21 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first collect of data done<br/>
+Thu Feb 02 15:02:21 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Authorized user : admin<br/>
+Thu Feb 02 15:02:21 UTC 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JavaMelody filter init done in 270 ms<br/>
+</div>
+</div>
+</body></html>
